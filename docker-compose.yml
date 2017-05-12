@@ -1,22 +1,10 @@
 version: '2'
 services:
-    www_data:
-        container_name: www_data
-        image: jdequeant/rpi-alpine-wwwdata
-        volumes:
-            - /home/pirate/containers/jdequeant/rpi-alpine-h2o/var/www:/var/www
-        command: sh
-    mysql_data:
-        container_name: mysql_data
-        image: jdequeant/rpi-alpine-mysqldata
-        volumes:
-            - /home/pirate/containers/jdequeant/rpi-alpine-h2o/var/lib/mysql:/var/lib/mysql
-        command: sh
     php:
         container_name: php
         image: jdequeant/rpi-alpine-php7fpm:latest
-        volumes_from:
-            - www_data
+        volumes:
+            - /home/pirate/containers/jdequeant/rpi-alpine-h2o/var/www:/var/www
     h2o:
         container_name: h2o
         image: jdequeant/rpi-alpine-h2o:php-fpm
@@ -28,7 +16,6 @@ services:
             XDEBUG_CONFIG: remote_host=172.22.0.1
         volumes:
             - /home/pirate/containers/jdequeant/rpi-alpine-h2o/etc/h2o:/etc/h2o
-        volumes_from:
-            - www_data
+            - /home/pirate/containers/jdequeant/rpi-alpine-h2o/var/www:/var/www
         links:
             - php
